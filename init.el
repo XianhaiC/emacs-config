@@ -11,6 +11,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;
 
+;; use the left super key instead of left alt
+(setq x-super-keysym 'meta)
+
 ;; minimalism
 (setq inhibit-startup-message t)
 (scroll-bar-mode -1)
@@ -122,7 +125,7 @@
   :custom ((evil-undo-system 'undo-tree)))
 
 (use-package evil-collection
-  :after evil
+  :after (evil magit)
   :config
   (evil-collection-init))
 
@@ -161,6 +164,7 @@
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
   :bind-keymap
   ("C-c p" . projectile-command-map)
   :init
@@ -168,6 +172,12 @@
     (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired))
 
+(use-package counsel-projectile
+  :config (counsel-projectile-mode))
+
+(use-package magit
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
 ;; keymappings
 ;;;;;;;;;;;;;;
@@ -211,7 +221,14 @@
    "ts" '(hydra-text-scale/body :which-key "scale text")
    "tr" '(hydra-resize-win/body :which-key "resize window")
    "tw" '(hydra-switch-win/body :which-key "switch window")
-   ":" '(counsel-M-x :which-key "bring up M-x"))
+
+   "p" '(:ignore t :which-key "projects")
+   "pp" '(projectile-switch-project :which-key "switch projects")
+
+   ; generic mappings
+   ":" '(counsel-M-x :which-key "bring up M-x")
+   "." '(find-file :which-key "find file")
+   "SPC" '(projectile-find-file :which-key "find project file"))
 
 ;; make esc quit prompts
 ;; TODO get rid of these
